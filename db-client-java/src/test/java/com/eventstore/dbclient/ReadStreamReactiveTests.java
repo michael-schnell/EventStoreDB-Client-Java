@@ -19,7 +19,7 @@ public class ReadStreamReactiveTests extends ESDBTests {
                 .fromStart()
                 .notResolveLinkTos();
 
-        List<ResolvedEvent> events = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", 10, options))
+        List<ResolvedEventWithContext> events = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", 10, options))
                 .collect(toList())
                 .blockingGet();
 
@@ -35,7 +35,7 @@ public class ReadStreamReactiveTests extends ESDBTests {
                 .fromEnd()
                 .notResolveLinkTos();
 
-        List<ResolvedEvent> events = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", 10, options))
+        List<ResolvedEventWithContext> events = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", 10, options))
                 .collect(toList())
                 .blockingGet();
 
@@ -51,11 +51,11 @@ public class ReadStreamReactiveTests extends ESDBTests {
                 .fromEnd()
                 .notResolveLinkTos();
 
-        List<ResolvedEvent> events1 = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", Long.MAX_VALUE, options))
+        List<ResolvedEventWithContext> events1 = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", Long.MAX_VALUE, options))
                 .collect(toList())
                 .blockingGet();
 
-        List<ResolvedEvent> events2 = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", options))
+        List<ResolvedEventWithContext> events2 = Flowable.fromPublisher(client.readStreamReactive("dataset20M-1800", options))
                 .collect(toList())
                 .blockingGet();
 
@@ -66,7 +66,7 @@ public class ReadStreamReactiveTests extends ESDBTests {
         Assertions.assertEquals(firstEvent1.getEventId(), firstEvent2.getEventId());
     }
 
-    private void verifyAgainstTestData(List<ResolvedEvent> actualEvents, String filenameStem) {
+    private void verifyAgainstTestData(List<ResolvedEventWithContext> actualEvents, String filenameStem) {
         ResolvedEvent[] actualEventsArray = actualEvents.toArray(new ResolvedEvent[0]);
 
         TestResolvedEvent[] expectedEvents = TestDataLoader.loadSerializedResolvedEvents(filenameStem);
